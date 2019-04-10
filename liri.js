@@ -39,7 +39,12 @@ if (nodeArg[2] === commandArray[2]) {
 
     axios.get(endpoint).then(
         function (res) {
-            console.log(res.data.offers.venue.name);
+            // console.log(res.data);
+            console.log("Artist concert info: ")
+            console.log("Artist will be playing at " + res.data[0].venue.name);
+            console.log("Artist will play in " + res.data[0].venue.city);
+            console.log("date of performance: " + moment(res.data[0].datetime).format("MM-DD-YYYY"));
+            
         }
     )
 }

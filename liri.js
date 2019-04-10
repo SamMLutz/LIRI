@@ -33,7 +33,9 @@ if (nodeArg[2] === commandArray[2]) {
             console.log("Actors: " + response.data.Actors);
         }
     );
-} else if (nodeArg[2] === commandArray[0]) {
+}
+
+else if (nodeArg[2] === commandArray[0]) {
     var artist = nodeArg[3];
     var endpoint = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
 
@@ -44,7 +46,22 @@ if (nodeArg[2] === commandArray[2]) {
             console.log("Artist will be playing at " + res.data[0].venue.name);
             console.log("Artist will play in " + res.data[0].venue.city);
             console.log("date of performance: " + moment(res.data[0].datetime).format("MM-DD-YYYY"));
-            
+
         }
     )
+}
+
+else if (nodeArg[2] === commandArray[1]) {
+    var song = nodeArg[3]
+
+    spotify.search({ type: 'track', query: song, limit: 2 }, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        console.log("Track info: ")
+        console.log("Name: " + data.tracks.items[0].name)
+        console.log("Artist: " + data.tracks.items[0].artists[0].name);
+        console.log("Album: " + data.tracks.items[0].album.name)
+        console.log("Track preview: " + data.tracks.items[0].preview_url);
+    });
 }

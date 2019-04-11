@@ -20,6 +20,10 @@ var commandArray = ["concert-this", "spotify-this-song", "movie-this", "do-what-
 if (nodeArg[2] === commandArray[2]) {
     var movie = nodeArg[3];
 
+    if (nodeArg[3] === undefined) {
+        var movie = "Mr. Nobody";
+    }
+
     axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
 
@@ -54,14 +58,33 @@ else if (nodeArg[2] === commandArray[0]) {
 else if (nodeArg[2] === commandArray[1]) {
     var song = nodeArg[3]
 
-    spotify.search({ type: 'track', query: song, limit: 2 }, function (err, data) {
-        if (err) {
-            return console.log('Error occurred: ' + err);
-        }
-        console.log("Track info: ")
-        console.log("Name: " + data.tracks.items[0].name)
-        console.log("Artist: " + data.tracks.items[0].artists[0].name);
-        console.log("Album: " + data.tracks.items[0].album.name)
-        console.log("Track preview: " + data.tracks.items[0].preview_url);
-    });
+    if (nodeArg[3] === undefined) {
+        // song = "''";
+        spotify
+            .request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
+            .then(function (data) {
+                console.log(data);
+                console.log("Track info: ")
+                console.log("Name: " + data.name)
+                console.log("Artist: " + data.artists[0].name);
+                console.log("Album: " + data.album.name)
+                console.log("Track preview: " + data.preview_url);
+            })
+            .catch(function (err) {
+                console.error('Error occurred: ' + err);
+            });
+    } else {
+
+        spotify.search({ type: 'track', query: song, limit: 1 }, function (err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+            // console.log(data.tracks);
+            console.log("Track info: ")
+            console.log("Name: " + data.tracks.items[0].name)
+            console.log("Artist: " + data.tracks.items[0].artists[0].name);
+            console.log("Album: " + data.tracks.items[0].album.name)
+            console.log("Track preview: " + data.tracks.items[0].preview_url);
+        });
+    }
 }

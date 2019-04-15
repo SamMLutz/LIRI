@@ -2,6 +2,8 @@ require("dotenv").config();
 
 var keys = require("./keys.js");
 
+const fs = require('fs');
+
 var Spotify = require('node-spotify-api');
 
 var spotify = new Spotify(keys.spotify);
@@ -18,7 +20,9 @@ var nodeArg = process.argv;
 var commandArray = ["concert-this", "spotify-this-song", "movie-this", "do-what-it-says"];
 
 // functions for each command
-function movieThis() {
+
+// movie function
+function movieThis(movie) {
     axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
 
@@ -33,6 +37,34 @@ function movieThis() {
         })
 };
 
+// spotify function
+function spotifySong(song) {
+    spotify.search({ type: 'track', query: song, limit: 1 }, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        // console.log(data.tracks);
+        console.log("Track info: ")
+        console.log("Name: " + data.tracks.items[0].name)
+        console.log("Artist: " + data.tracks.items[0].artists[0].name);
+        console.log("Album: " + data.tracks.items[0].album.name)
+        console.log("Track preview: " + data.tracks.items[0].preview_url);
+    });
+}
+
+// concert function
+function concertThis(endpoint, artist) {
+    axios.get(endpoint).then(
+        function (res) {
+            // console.log(res.data);
+            console.log("Artist concert info: ")
+            console.log("Artist will be playing at " + res.data[0].venue.name);
+            console.log("Artist will play in " + res.data[0].venue.city);
+            console.log("date of performance: " + moment(res.data[0].datetime).format("MM-DD-YYYY"));
+
+        })
+}
+
 if (nodeArg[2] === commandArray[2]) {
     var movie = nodeArg[3];
 
@@ -40,7 +72,7 @@ if (nodeArg[2] === commandArray[2]) {
         var movie = "Mr. Nobody";
     }
 
-    movieThis();
+    movieThis(movie);
     // axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy").then(
     //     function (response) {
 
@@ -60,16 +92,16 @@ else if (nodeArg[2] === commandArray[0]) {
     var artist = nodeArg[3];
     var endpoint = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
 
-    axios.get(endpoint).then(
-        function (res) {
-            // console.log(res.data);
-            console.log("Artist concert info: ")
-            console.log("Artist will be playing at " + res.data[0].venue.name);
-            console.log("Artist will play in " + res.data[0].venue.city);
-            console.log("date of performance: " + moment(res.data[0].datetime).format("MM-DD-YYYY"));
+    // axios.get(endpoint).then(
+    //     function (res) {
+    //         // console.log(res.data);
+    //         console.log("Artist concert info: ")
+    //         console.log("Artist will be playing at " + res.data[0].venue.name);
+    //         console.log("Artist will play in " + res.data[0].venue.city);
+    //         console.log("date of performance: " + moment(res.data[0].datetime).format("MM-DD-YYYY"));
 
-        }
-    )
+    //     })
+    concertThis(endpoint, artist);
 }
 
 else if (nodeArg[2] === commandArray[1]) {
@@ -92,17 +124,19 @@ else if (nodeArg[2] === commandArray[1]) {
             });
     } else {
 
-        spotify.search({ type: 'track', query: song, limit: 1 }, function (err, data) {
-            if (err) {
-                return console.log('Error occurred: ' + err);
-            }
-            // console.log(data.tracks);
-            console.log("Track info: ")
-            console.log("Name: " + data.tracks.items[0].name)
-            console.log("Artist: " + data.tracks.items[0].artists[0].name);
-            console.log("Album: " + data.tracks.items[0].album.name)
-            console.log("Track preview: " + data.tracks.items[0].preview_url);
-        });
+        spotifySong(song);
+
+        // spotify.search({ type: 'track', query: song, limit: 1 }, function (err, data) {
+        //     if (err) {
+        //         return console.log('Error occurred: ' + err);
+        //     }
+        //     // console.log(data.tracks);
+        //     console.log("Track info: ")
+        //     console.log("Name: " + data.tracks.items[0].name)
+        //     console.log("Artist: " + data.tracks.items[0].artists[0].name);
+        //     console.log("Album: " + data.tracks.items[0].album.name)
+        //     console.log("Track preview: " + data.tracks.items[0].preview_url);
+        // });
     }
 }
 else if (nodeArg[2] === commandArray[3]) {
@@ -116,5 +150,43 @@ else if (nodeArg[2] === commandArray[3]) {
 
     // call appropriate functions 
 
+    // 
+
+    fs.readFile('./random.txt', 'utf8', (err, data) => {
+        if (err) {
+            console.log(err)
+        };
+        // console.log(data);
+        var dataArray = data.split(',');
+        // console.log(dataArray);
+        // console.log(dataArray[0])
+        if(dataArray[0] === "spotify-this-song") {
+            spotifySong(dataArray[1])
+        }
+        else if (dataArray[0] === "movie-this"){
+            movie = dataArray[1];
+            movieThis(movie);
+        }
+        // else if (dataArray[0] === "concert-this") {
+        //     artist = dataArray[1];
+        //     endpoint = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
+        //     concertThis(endpoint);
+        //     console.log(artist)
+        //     console.log(endpoint)
+            
+        // }
+    });
+    
+    
+
 
 }
+
+// fs.readFile('./random.txt', 'utf8', (err, data) => {
+//     if (err) {
+//         console.log(err)
+//     };
+//     console.log(data);
+//     var dataArray = data.split(',');
+//     console.log(dataArray);
+// });

@@ -83,7 +83,7 @@ else if (nodeArg[2] === commandArray[1]) {
         spotify
             .request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
             .then(function (data) {
-                console.log(data);
+                // console.log(data);
                 console.log("Track info: ")
                 console.log("Name: " + data.name)
                 console.log("Artist: " + data.artists[0].name);

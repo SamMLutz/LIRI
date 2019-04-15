@@ -17,13 +17,8 @@ var nodeArg = process.argv;
 
 var commandArray = ["concert-this", "spotify-this-song", "movie-this", "do-what-it-says"];
 
-if (nodeArg[2] === commandArray[2]) {
-    var movie = nodeArg[3];
-
-    if (nodeArg[3] === undefined) {
-        var movie = "Mr. Nobody";
-    }
-
+// functions for each command
+function movieThis() {
     axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
 
@@ -35,8 +30,30 @@ if (nodeArg[2] === commandArray[2]) {
             console.log("The movie is in: " + response.data.Language);
             console.log("plot: " + response.data.Plot);
             console.log("Actors: " + response.data.Actors);
-        }
-    );
+        })
+};
+
+if (nodeArg[2] === commandArray[2]) {
+    var movie = nodeArg[3];
+
+    if (nodeArg[3] === undefined) {
+        var movie = "Mr. Nobody";
+    }
+
+    movieThis();
+    // axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy").then(
+    //     function (response) {
+
+    //         // console.log(response)
+    //         console.log(response.data.Title);
+    //         console.log("Release year: " + response.data.Year);
+    //         console.log("The movie's IMDB rating is: " + response.data.imdbRating);
+    //         console.log("The movie was produced in: " + response.data.Country);
+    //         console.log("The movie is in: " + response.data.Language);
+    //         console.log("plot: " + response.data.Plot);
+    //         console.log("Actors: " + response.data.Actors);
+    //     }
+    // );
 }
 
 else if (nodeArg[2] === commandArray[0]) {
@@ -88,8 +105,16 @@ else if (nodeArg[2] === commandArray[1]) {
         });
     }
 }
-    else if (nodeArg[2] === commandArray[3]) {
-        
+else if (nodeArg[2] === commandArray[3]) {
+    // read file from random.txt
 
-        
-    }
+    // append txt to liri.js file
+
+    // split the string into action and parameter
+
+    // set nodeARg[3] = action and nodeArg[4] = parameter
+
+    // call appropriate functions 
+
+
+}

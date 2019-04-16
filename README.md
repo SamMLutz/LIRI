@@ -11,6 +11,6 @@ Node.js. We also make use of the "dotenv" package to store and call on our spoti
 spotify API. For our final command option we have "do-what-it-says". In a separate file in the same folder we have text 
 containing one of our other three commands followed by a relevant search parameter saved to "random.txt". Using the "fs." node 
 package we grab the information in the random.txt file and use it to call the appropriate LIRI command. In this code we have a
-package.json file detailing on relative dependencies for this LIRI app to run. Below we have screenshots of the app in action.
+package.json file detailing on relative dependencies for this LIRI app to run. Screenshots can be found in the "images.liri" directory in the LIRI folder.
 
 
